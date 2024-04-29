@@ -22,11 +22,8 @@
 
 """
 Code to delay the import of a moldule, and give a nice error message if
-the module is not installed. for dealing with dependencies.
+the module is not installed. Used for dealing with dependencies.
 """
-##############################################################################
-# imports
-##############################################################################
 
 import os
 import sys
@@ -34,43 +31,11 @@ import inspect
 import importlib
 import textwrap
 
+
 __all__ = ['import_']
 
-##############################################################################
-# globals
-##############################################################################
 
 MESSAGES = {
-    'networkx': '''
-    The code at {filename}:{line_number} requires the python module
-    NetworkX, which is a software package for the creation, manipulation, and study of
-    the structure, dynamics, and functions of complex networks.
-
-    NetworkX can be downloaded from https://pypi.python.org/pypi/networkx/, or
-    installed with the python "easy_install" or "pip" package managers using:
-
-    # easy_install networkx
-    or
-    # pip install networkx
-    ''',
-
-    'tables': '''
-    The code at {filename}:{line_number} requires the python module PyTables,
-    which is a package for managing hierarchical datasets and designed to
-    efficiently and easily cope with extremely large amounts of data.
-
-    PyTables can be downloaded from http://www.pytables.org, or installed with
-    the python "easy_install" or "pip" package managers using:
-
-    # easy_install tables
-    or
-    # pip install tables
-
-    PyTables also depends on the numexpr package, as well as the C-language
-    HDF5 library. For detailed installation instructions, visit
-    http://pytables.github.io/usersguide/installation.html
-    ''',
-
     'netCDF4': '''
     The code at {filename}:{line_number} requires the netcdf4-python module,
     which is a python interface to the NetCDF software libraries and self-describing,
@@ -78,9 +43,9 @@ MESSAGES = {
     sharing of array-oriented scientific data.
 
     netcdf4-python can be downloaded from https://pypi.python.org/pypi/netCDF,
-    or installed with the python "easy_install" or "pip" package managers using:
+    or installed with the python anaconda or pip package managers using:
 
-    # easy_install netCDF4
+    # conda install netCDF4
     or
     # pip install netCDF4
 
@@ -99,49 +64,18 @@ MESSAGES = {
     conda install -c conda-forge openmm
     ''',
 
-    'scripttest': '''
-    The code at {filename}:{line_number} requires the scripttest package,
-    which is a python package for testing command-line applications
-
-    scripttest can be downloaded from https://pypi.python.org/pypi/ScriptTest/,
-    or installed with the python "easy_install" or "pip" package managers using:
-
-    # easy_install scripttest
-    or
-    # pip install scripttest
-    ''',
-
     'openmm.app': '''
     The code at {filename}:{line_number} requires the openmm.app module, which is
     the python OpenMM application layer. OpenMM is a toolkit for molecular simulation
     using high performance GPU code.
 
     openmm.app is installed with OpenMM >= 7.6, which is available at http://openmm.org
-    ''',
+    It can be installed with the "conda" package mangers using:
 
-    'pandas': '''
-    The code at {filename}:{line_number} requires the "pandas" package, which is
-    an open source, BSD-licensed library providing high-performance, easy-to-use
-    data structures and data analysis tools for the Python programming language.
-
-    pandas can be downloaded from https://pypi.python.org/pypi/pandas or installed
-    with the python "easy_install" or "pip" package managers using:
-
-    # easy_install pandas
-    or
-    # pip install pandas
-    ''',
-
-    'scipy': ''',
-
-    The code at {filename}:{line_number} requires the scipy package
+    conda install -c conda-forge openmm
     ''',
 }
 
-
-##############################################################################
-# functions
-##############################################################################
 
 def import_(module):
     """Import a module, and issue a nice message to stderr if the module isn't installed.
